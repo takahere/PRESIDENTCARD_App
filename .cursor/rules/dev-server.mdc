@@ -1,0 +1,60 @@
+---
+description: 開発サーバーの起動確認と自動復旧
+globs: **/*
+alwaysApply: true
+---
+
+# Development Server Rules
+
+## Port Configuration
+- 常に **port 4000** を使用（3000は他で使用中）
+- URL: http://localhost:4000
+
+## Before ANY UI/Page Changes
+
+1. 開発サーバーが起動していることを確認
+2. 起動していない場合は以下を実行:
+   ```bash
+   npm run dev -- -p 4000
+   ```
+3. コンパイルエラーがないことを確認
+
+## After Changes
+
+1. ページにアクセスしてエラーがないことを確認
+2. TypeScriptエラーがないことを確認
+3. コンソールエラーがないことを確認
+4. 画面が正しく表示されることを確認
+
+## Error Recovery
+
+### Error Code: -102 (Connection Refused)
+**原因:** サーバーが起動していない
+**解決:**
+```bash
+# ポート4000を使用中のプロセスを確認
+lsof -i :4000
+
+# サーバーを起動
+npm run dev -- -p 4000
+```
+
+### Error 404 (Not Found)
+**原因:** ルートが存在しない
+**解決:**
+- ファイルパスを確認（app/xxx/page.tsx形式）
+- Next.js App Routerのルーティングルールを確認
+
+### Compilation Error
+**原因:** TypeScript/構文エラー
+**解決:**
+- ターミナルのエラーメッセージを確認
+- 該当ファイルの構文エラーを修正
+
+## Verification Checklist
+
+新しいページを作成した後:
+- [ ] http://localhost:4000/[path] にアクセス可能
+- [ ] コンソールにエラーがない
+- [ ] UIが正しくレンダリングされている
+- [ ] ナビゲーションが機能する

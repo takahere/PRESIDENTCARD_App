@@ -1,0 +1,145 @@
+---
+description: UIコンポーネントや画面レイアウトを実装する際に参照するルール
+globs: **/*.tsx, **/*.css
+---
+
+# UI Implementation Rules (UPSIDER Design System)
+
+## 1. Colors & Theming (Dark Theme)
+
+### Brand Colors
+- **Primary:** `bg-upsider-primary` (#394D45) - ボタン、アクセント
+- **Background:** `bg-upsider-bg` (#001215) - メイン背景
+- **Surface:** `bg-upsider-surface` (#0a1f24) - カード、モーダル
+- **Surface Light:** `bg-upsider-surface-light` (#132a30) - ホバー、セカンダリボタン
+
+### Text Colors
+- **Primary Text:** `text-white` - メインテキスト
+- **Secondary Text:** `text-white/60` - サブテキスト、説明文
+- **Muted Text:** `text-white/40` - プレースホルダー、アイコン
+
+### Status Colors
+- **Success:** `text-green-400` / `bg-green-400/20`
+- **Warning:** `text-amber-400` / `bg-amber-400/20`
+- **Error:** `text-red-400` / `bg-red-400/20`
+
+## 2. Typography
+
+### グローバルフォント（必須）
+全てのテキストに **SF Pro** フォントを使用すること。
+
+```css
+/* body要素に適用済み */
+font-family: "SF Pro", system-ui, sans-serif;
+```
+
+### フォントクラス
+| 用途 | Tailwindクラス |
+|------|---------------|
+| 見出し | `font-sf-display` |
+| 本文・ラベル | `font-sf-pro`（デフォルト） |
+| 金額表示 | `font-sf-pro tabular-nums` |
+
+### 金額表示ルール
+- フォント: `font-sf-pro tabular-nums`（等幅数字）
+- 配置: 右揃え
+- フォーマット: カンマ区切り、円記号付き（¥1,234,567）
+- ウェイト: `font-bold` または `font-semibold`
+
+## 3. Spacing & Layout
+
+### Padding/Margin
+- ページ余白: `px-4` (16px)
+- セクション間: `space-y-6` (24px)
+- カード内: `p-4` (16px)
+- リスト項目間: 境界線で区切り
+
+### Corner Radius
+- ボタン: `rounded-xl` (12px)
+- カード: `rounded-xl` (12px)
+- 入力欄: `rounded-lg` (8px)
+- バッジ: `rounded-full`
+
+## 4. Interaction Patterns (Mobile First)
+
+### 絶対禁止
+- `hover:` スタイル → モバイルでは機能しない
+- ダブルタップ → 誤操作の原因
+
+### 必須実装
+- タップ領域: 最低 `44x44px` (min-h-[44px] min-w-[44px])
+- タップフィードバック: `whileTap={{ scale: 0.95 }}` (Framer Motion)
+- 押下時の色変化: `active:opacity-80`
+
+## 5. Animation Guidelines (Framer Motion)
+
+### 画面遷移
+```tsx
+initial={{ opacity: 0, x: 20 }}
+animate={{ opacity: 1, x: 0 }}
+transition={{ duration: 0.3 }}
+```
+
+### タップフィードバック
+```tsx
+whileTap={{ scale: 0.95 }}
+transition={{ duration: 0.1 }}
+```
+
+### モーダル/シート
+```tsx
+initial={{ opacity: 0, y: "100%" }}
+animate={{ opacity: 1, y: 0 }}
+```
+
+## 6. Semantic Color Usage (セマンティックカラー)
+
+| 用途 | Tailwindクラス | Hex |
+|------|---------------|-----|
+| ボタン背景 | `bg-upsider-primary` | #394D45 |
+| 画面背景 | `bg-upsider-bg` | #001215 |
+| アクセント | `text-upsider-accent` | #E7A344 |
+| 成功/確定 | `text-upsider-primary-text` | #1BA86F |
+| エラー | `text-upsider-error` | #FF3B30 |
+| 情報 | `text-upsider-info` | #3A82F7 |
+| カード背景 | `bg-upsider-card` | #242424 |
+| カードボーダー | `border-upsider-card-border` | #2F2F2F |
+| プレースホルダー | `text-upsider-placeholder` | #B9B7B6 |
+| グレーテキスト | `text-upsider-text-gray` | #717171 |
+| フォーム背景 | `bg-upsider-form-bg` | #FFFFFF |
+| プログレス進行済み | `bg-upsider-progress-completed` | rgba(255,255,255,0.8) |
+| プログレス未進行 | `bg-upsider-progress-ongoing` | rgba(255,255,255,0.1) |
+| カード内セル区切り | `border-upsider-card-cell-border` | rgba(255,255,255,0.3) |
+
+## 7. Typography Classes
+
+**注意: 全てのテキストに `font-sf-pro` がグローバル適用済み**
+
+| 用途 | Tailwindクラス | 備考 |
+|------|---------------|------|
+| 大見出し | `text-header-huge font-sf-display` | SF Pro Display |
+| 見出し | `text-header-large font-sf-display` | SF Pro Display |
+| 中見出し | `text-header-medium font-sf-display` | SF Pro Display |
+| 小見出し | `text-header-small font-sf-display` | SF Pro Display |
+| 本文（大） | `text-paragraph-medium` | SF Pro（デフォルト） |
+| 本文（小） | `text-paragraph-small` | SF Pro（デフォルト） |
+| 補足文 | `text-body-medium` | SF Pro（デフォルト） |
+| 補足文（小） | `text-body-small` | SF Pro（デフォルト） |
+| 注釈 | `text-caption-medium` | SF Pro（デフォルト） |
+| 注釈（小） | `text-caption-small` | SF Pro（デフォルト） |
+| 金額 | `font-sf-pro tabular-nums` | 等幅数字 |
+
+## 8. Component Usage Priority
+
+新しいUIを作る際は、以下の順序で検討すること:
+
+1. `@/components/ui/ios/` の既存コンポーネントを使用
+2. 既存コンポーネントをカスタマイズ（props経由）
+3. やむを得ない場合のみ新規作成
+
+### Available Components
+- `Button` - タップフィードバック付きボタン
+- `Card` - 影付きカードコンテナ
+- `ListCell` - アイコン付きリスト項目
+- `BottomSheet` - 下からスライドするモーダル
+- `Navigation` - ヘッダーナビゲーション

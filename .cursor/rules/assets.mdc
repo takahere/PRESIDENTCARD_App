@@ -1,0 +1,116 @@
+---
+description: 画像アセットとアイコンの定義
+globs: **/*.tsx
+---
+
+# Assets Strategy
+
+## 1. Directory Structure
+
+```
+public/
+└── assets/
+    ├── cards/         # カード券面画像
+    ├── logos/         # サービスロゴ
+    ├── vendors/       # 加盟店ロゴ（明細用）
+    └── icons/         # 特殊なアイコン
+```
+
+## 2. Card Images (カード券面)
+
+カードの表示を求められた場合は、以下のパスを使用し、必ず `next/image` コンポーネントを使うこと。
+
+| Card Type | Path | Size |
+|-----------|------|------|
+| Virtual Card (Blue) | `/assets/cards/virtual-card.png` | 300x190 |
+| Real Card (Black) | `/assets/cards/real-card.png` | 300x190 |
+| Frozen Card | `/assets/cards/card-frozen.png` | 300x190 |
+
+### 実装例
+```tsx
+import Image from "next/image";
+
+<Image
+  src="/assets/cards/virtual-card.png"
+  alt="Virtual Card"
+  width={300}
+  height={190}
+  className="rounded-xl shadow-lg"
+/>
+```
+
+## 3. Vendor Logos (加盟店ロゴ)
+
+明細リスト(Transaction List)を作る際は、加盟店名に応じて以下のロゴを表示すること。
+
+| Vendor | Path |
+|--------|------|
+| AWS | `/assets/vendors/aws.png` |
+| Google | `/assets/vendors/google.png` |
+| Meta | `/assets/vendors/meta.png` |
+| Notion | `/assets/vendors/notion.png` |
+| Slack | `/assets/vendors/slack.png` |
+| Uber | `/assets/vendors/uber.png` |
+| Default | `/assets/vendors/default.svg` |
+
+### ロゴがない場合
+1. Lucide Reactのカテゴリアイコンを使用
+2. 背景: `bg-white/10` の円形
+3. アイコンサイズ: 20px
+
+## 4. Brand Colors (Tailwind Config)
+
+`tailwind.config.ts` には以下の色を定義済み:
+
+| Color Name | CSS Variable | Hex |
+|------------|--------------|-----|
+| `bg-upsider-primary` | `--upsider-primary` | #394D45 |
+| `bg-upsider-bg` | `--upsider-bg` | #001215 |
+| `bg-upsider-surface` | `--upsider-surface` | #0a1f24 |
+| `bg-upsider-surface-light` | `--upsider-surface-light` | #132a30 |
+
+## 5. Icon Usage (Lucide React)
+
+### 推奨サイズ
+- ナビゲーション: 24px
+- リスト項目: 20px
+- ボタン内: 16px
+- バッジ: 12px
+
+### よく使うアイコン
+```tsx
+import {
+  CreditCard,      // カード
+  ArrowUpRight,    // 送金・支出
+  ArrowDownLeft,   // 入金・返金
+  Settings,        // 設定
+  Bell,            // 通知
+  Lock,            // セキュリティ
+  Eye, EyeOff,     // 表示/非表示
+  Copy,            // コピー
+  Check,           // 完了
+  X,               // キャンセル・閉じる
+  ChevronRight,    // 次へ
+  ChevronLeft,     // 戻る
+} from "lucide-react";
+```
+
+## 6. Placeholder Assets
+
+開発中は以下のプレースホルダーを使用:
+
+### カード画像プレースホルダー
+```tsx
+// カード画像がまだない場合
+<div className="w-[300px] h-[190px] rounded-xl bg-gradient-to-br from-upsider-primary to-upsider-surface flex items-center justify-center">
+  <CreditCard size={48} className="text-white/60" />
+</div>
+```
+
+### ベンダーロゴプレースホルダー
+```tsx
+// ロゴがない場合のフォールバック
+<div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+  <Building2 size={20} className="text-white/60" />
+</div>
+```

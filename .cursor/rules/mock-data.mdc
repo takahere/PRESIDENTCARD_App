@@ -1,0 +1,130 @@
+---
+description: リアルなダミーデータを生成する際のルール
+globs: **/*.tsx
+---
+
+# Mock Data Generation Rules
+
+## 1. 加盟店リスト (Vendor List)
+
+### SaaS/クラウドサービス (法人カードでよく使われる)
+- Amazon Web Services (AWS)
+- Google Cloud Platform
+- Microsoft Azure
+- Slack Technologies
+- Notion Labs
+- Figma Inc.
+- Zoom Video Communications
+
+### 広告プラットフォーム
+- Google Ads
+- Meta (Facebook Ads)
+- X (Twitter Ads)
+- LinkedIn
+
+### 交通・移動
+- JR東日本
+- JR西日本
+- 全日本空輸 (ANA)
+- 日本航空 (JAL)
+- Uber Japan
+
+### 飲食・配送
+- Uber Eats
+- 出前館
+- スターバックス
+- ホテルオークラ
+
+## 2. 金額のリアリティ
+
+### 避けるべき金額
+- ❌ 1,000円
+- ❌ 10,000円
+- ❌ 100,000円
+
+### 使うべき金額（端数を含む）
+- ✅ 1,245,390円
+- ✅ 89,760円
+- ✅ 3,456,789円
+- ✅ 12,340円
+- ✅ 567,890円
+
+### 金額レンジ
+- SaaSサービス: 5,000円 〜 500,000円
+- 広告費: 100,000円 〜 10,000,000円
+- 交通費: 1,000円 〜 50,000円
+- 会食費: 5,000円 〜 200,000円
+
+## 3. 日付のリアリティ
+
+### 最近の日付を使う
+- 今日
+- 昨日
+- 3日前
+- 先週
+- 今月
+
+### 表示フォーマット
+- 今日/昨日: 「今日」「昨日」と表示
+- 1週間以内: 「3日前」などの相対表示
+- 1週間以上: 「12月25日」などの日付表示
+- 年が異なる: 「2024年12月25日」
+
+## 4. ステータス配分
+
+### 決済履歴の典型的な配分
+- 確定: 80%
+- 処理中: 15%
+- キャンセル済: 5%
+
+## 5. Lucide React アイコンマッピング
+
+### カテゴリ別アイコン
+```tsx
+import {
+  Cloud,          // SaaS/クラウド
+  Megaphone,      // 広告
+  Train,          // 交通
+  Plane,          // 航空
+  UtensilsCrossed, // 飲食
+  Building2,      // 宿泊
+  ShoppingBag,    // 物品購入
+  CreditCard,     // その他決済
+} from "lucide-react";
+```
+
+### 加盟店ロゴがない場合のフォールバック
+1. カテゴリに応じたLucideアイコンを使用
+2. グレー背景の円形アイコンとして表示
+3. アイコンカラーは `text-white/60`
+
+## 6. サンプルデータ構造
+
+```typescript
+interface Transaction {
+  id: string;
+  vendor: string;
+  vendorLogo?: string;  // /assets/vendors/xxx.png
+  category: "saas" | "ads" | "travel" | "dining" | "other";
+  amount: number;
+  currency: "JPY";
+  status: "confirmed" | "pending" | "cancelled";
+  date: Date;
+  cardLast4: string;
+}
+
+// 使用例
+const mockTransactions: Transaction[] = [
+  {
+    id: "tx_001",
+    vendor: "Amazon Web Services",
+    vendorLogo: "/assets/vendors/aws.png",
+    category: "saas",
+    amount: 1245390,
+    currency: "JPY",
+    status: "confirmed",
+    date: new Date(),
+    cardLast4: "4242",
+  },
+];
+```

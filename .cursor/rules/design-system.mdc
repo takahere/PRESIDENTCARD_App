@@ -1,0 +1,212 @@
+---
+description: デザインシステムの構成と使用方法
+globs: **/*.tsx
+alwaysApply: true
+---
+
+# PRESIDENT CARD Design System
+
+このファイルは、UIコンポーネントやスタイリングを実装する際の統一ルールを定義します。
+
+## 0. Icon Library (CRITICAL)
+
+**Material Icons を使用すること（Lucide Reactは使用禁止）**
+
+```tsx
+// ✅ 正しい使い方
+import HomeIcon from "@mui/icons-material/Home";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import PersonIcon from "@mui/icons-material/Person";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+// ❌ 使用禁止
+import { Home, CreditCard } from "lucide-react";
+```
+
+### よく使うMaterial Icons
+| アイコン | Import |
+|---------|--------|
+| ホーム | `import HomeIcon from "@mui/icons-material/Home"` |
+| カード | `import CreditCardIcon from "@mui/icons-material/CreditCard"` |
+| 通知 | `import NotificationsIcon from "@mui/icons-material/Notifications"` |
+| 設定 | `import SettingsIcon from "@mui/icons-material/Settings"` |
+| ユーザー | `import PersonIcon from "@mui/icons-material/Person"` |
+| チェック | `import CheckCircleIcon from "@mui/icons-material/CheckCircle"` |
+| 矢印（戻る） | `import ArrowBackIcon from "@mui/icons-material/ArrowBack"` |
+| 矢印（進む） | `import ChevronRightIcon from "@mui/icons-material/ChevronRight"` |
+| 会社 | `import BusinessIcon from "@mui/icons-material/Business"` |
+| カメラ | `import CameraAltIcon from "@mui/icons-material/CameraAlt"` |
+
+## 1. Design System Structure
+
+### Foundation (基盤)
+- **Colors**: `bg-upsider-primary`, `bg-upsider-bg`, `bg-upsider-surface`, `bg-upsider-surface-light`
+- **Typography**: `font-sans` (日本語)、`font-mono tabular-nums` (数字・金額)
+
+### Platform-Specific Components
+
+#### iOS (`@/components/ui/ios/`)
+| Component | 用途 | Import |
+|-----------|------|--------|
+| Button | タップフィードバック付きボタン | `import { Button } from "@/components/ui/ios"` |
+| Card | ダークテーマのカード | `import { Card } from "@/components/ui/ios"` |
+| ListCell | リスト項目（アイコン+テキスト+金額） | `import { ListCell } from "@/components/ui/ios"` |
+| Navigation | ヘッダーナビゲーション | `import { Navigation } from "@/components/ui/ios"` |
+| BottomSheet | 下からのモーダルシート | `import { BottomSheet } from "@/components/ui/ios"` |
+| TabBar | ボトムタブナビゲーション | `import { TabBar } from "@/components/ui/ios"` |
+| ActionSheet | iOS風アクションシート | `import { ActionSheet } from "@/components/ui/ios"` |
+| SegmentedControl | セグメント切り替え | `import { SegmentedControl } from "@/components/ui/ios"` |
+
+#### Android (`@/components/ui/android/`)
+| Component | 用途 | Import |
+|-----------|------|--------|
+| Button | Material Button | `import { Button } from "@/components/ui/android"` |
+| Card | Material Card | `import { Card } from "@/components/ui/android"` |
+| ListItem | Material List Item | `import { ListItem } from "@/components/ui/android"` |
+| TopAppBar | Material App Bar | `import { TopAppBar } from "@/components/ui/android"` |
+| BottomSheet | Material Bottom Sheet | `import { BottomSheet } from "@/components/ui/android"` |
+| NavigationBar | Material Navigation Bar | `import { NavigationBar } from "@/components/ui/android"` |
+| FAB | Floating Action Button | `import { FAB } from "@/components/ui/android"` |
+| Snackbar | Material Snackbar | `import { Snackbar } from "@/components/ui/android"` |
+
+### Assets (アセット)
+- カード画像: `/assets/cards/`
+- ベンダーロゴ: `/assets/vendors/`
+- アイコン: **Material Icons** (`@mui/icons-material`)
+
+## 2. Color Palette
+
+```tsx
+// Brand Colors (Dark Theme)
+bg-upsider-primary    // #394D45 - Primary actions, accents
+bg-upsider-bg         // #001215 - Main background
+bg-upsider-surface    // #0a1f24 - Cards, modals
+bg-upsider-surface-light // #132a30 - Hover states, secondary surfaces
+
+// Text Colors
+text-white            // Primary text
+text-white/60         // Secondary text, subtitles
+text-white/40         // Muted text, placeholders
+
+// Status Colors
+text-green-400        // Success / 確定
+text-amber-400        // Warning / 処理中
+text-red-400          // Error / キャンセル済
+```
+
+## 3. Typography Rules
+
+```tsx
+// 見出し
+<h1 className="text-2xl font-bold text-white">利用可能額</h1>
+
+// 本文
+<p className="text-base font-medium text-white">カード利用明細</p>
+
+// 金額（等幅必須）
+<span className="font-mono tabular-nums text-white">¥45,200,000</span>
+
+// キャプション
+<span className="text-sm text-white/60">AWS Web Services • 確定</span>
+```
+
+## 4. Interaction Rules
+
+### タップフィードバック
+- すべてのインタラクティブ要素に `whileTap={{ scale: 0.95 }}` を適用
+- `hover:` スタイルは禁止（モバイルには hover がない）
+- 代わりに `active:` を使用
+
+### タップ領域
+- 最小サイズ: **44x44px**
+- 見た目が小さくても padding で確保
+
+### アニメーション
+- 画面遷移: `initial={{ opacity: 0, x: 20 }}` → `animate={{ opacity: 1, x: 0 }}`
+- モーダル: 下からスライドイン
+- ライブラリ: Framer Motion
+
+## 5. Spacing
+
+```tsx
+// ページ余白
+px-4    // 16px horizontal padding
+
+// セクション間
+space-y-6   // 24px gap
+
+// カード内
+p-4     // 16px padding
+
+// 角丸
+rounded-xl  // 12px - Buttons, Cards
+rounded-lg  // 8px - Inputs
+```
+
+## 6. UI封じ込めルール (CRITICAL)
+
+**すべてのUIはiPhoneモックフレーム内に表示されること。**
+
+- Navigation ヘッダー → フレーム内
+- BottomSheet / Dialog → フレーム内
+- Toast通知 → フレーム内
+- ローディング表示 → フレーム内
+
+BottomSheetは自動的にフレーム内にマウントされる。
+新しいモーダルを作る場合は `data-mobile-frame` 要素を探してマウントすること。
+
+## 7. Component Usage Examples
+
+### Button
+```tsx
+import { Button } from "@/components/ui/ios";
+
+<Button variant="primary">決済する</Button>
+<Button variant="secondary">キャンセル</Button>
+<Button variant="danger">カードを停止</Button>
+<Button variant="ghost">詳細を見る</Button>
+```
+
+### Card
+```tsx
+import { Card } from "@/components/ui/ios";
+
+<Card>
+  <p>カードの内容</p>
+</Card>
+
+<Card pressable onClick={handleClick}>
+  <p>タップ可能なカード</p>
+</Card>
+```
+
+### ListCell
+```tsx
+import { ListCell } from "@/components/ui/ios";
+import { Cloud } from "lucide-react";
+
+<ListCell
+  icon={Cloud}
+  iconColor="text-orange-400"
+  title="AWS Web Services"
+  subtitle={<span className="text-green-400">確定</span>}
+  rightText="¥45,200,000"
+  rightSubtext="今日"
+  showSeparator={true}
+  onClick={handleClick}
+/>
+```
+
+### BottomSheet
+```tsx
+import { BottomSheet } from "@/components/ui/ios";
+
+<BottomSheet
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  title="カード詳細"
+>
+  <p>シートの内容</p>
+</BottomSheet>
+```

@@ -1,0 +1,26 @@
+# Design Verification Scenarios
+# Usage: npm run verify:design "scenario description"
+
+## Basic Navigation Tests
+ホーム画面の各要素が正しく表示されているか確認する
+カード詳細ボタンをタップしてBottomSheetが開くか確認する
+設定ボタンをタップして反応を確認する
+
+## Card Detail Verification
+カード詳細画面でカード番号が正しいフォーマットで表示されているか確認する
+カード詳細画面の有効期限とCVVが正しく表示されているか確認する
+カード停止ボタンのタップ領域が十分か確認する
+
+## Transaction List Verification
+決済リストの各項目がタップ可能か確認する
+決済金額が右揃えで等幅フォントで表示されているか確認する
+決済ステータスの色分けが正しいか確認する
+
+## Design Consistency Checks
+全てのボタンがタップ時に適切なフィードバックを返すか確認する
+テキストカラーがUPSIDERのダークテーマに準拠しているか確認する
+スペーシングが一貫しているか確認する
+
+## Accessibility Checks
+全てのインタラクティブ要素が44x44px以上のタップ領域を持つか確認する
+テキストのコントラスト比が十分か確認する
